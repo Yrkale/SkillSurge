@@ -79,8 +79,8 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
             <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
               <HiOutlineUserCircle
-                className="cursor-pointer ml-5 my-2 dark:text-white text-black"
                 size={25}
+                className="cursor-pointer ml-5 my-2 text-black dark:text-white"
                 onClick={() => setOpen(true)}
               />
               <br />
