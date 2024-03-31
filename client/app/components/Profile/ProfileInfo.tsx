@@ -3,8 +3,12 @@ import Image from "next/image";
 import { styles } from "../../../app/styles/style";
 import { AiOutlineCamera } from "react-icons/ai";
 import avatarIcon from "../../../public/assets/avatar.png";
-import { useUpdateAvatarMutation } from "@/redux/features/user/userApi";
+import {
+  useEditProfileMutation,
+  useUpdateAvatarMutation,
+} from "@/redux/features/user/userApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import toast from "react-hot-toast";
 
 type Props = {
   avatar: string | null;
@@ -14,6 +18,8 @@ type Props = {
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
   const [name, setName] = useState(user && user.name);
   const [updateAvatar, { isSuccess, error }] = useUpdateAvatarMutation();
+  const [editProfile, { isSuccess: success, error: updateError }] =
+    useEditProfileMutation();
   const [loadUser, setLoadUser] = useState(false);
   const {} = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
 
@@ -29,16 +35,22 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || success) {
       setLoadUser(true);
     }
-    if (error) {
+    if (error || updateError) {
       console.log("error");
     }
-  }, [isSuccess, error]);
+    if (success) {
+      toast.success("Profile updated successfully");
+    }
+  }, [isSuccess, error, success, updateError]);
 
   const handleSubmit = async (e: any) => {
-    console.log("submit");
+    e.preventDefault();
+    if (name !== "") {
+      await editProfile({ name: name });
+    }
   };
 
   return (
@@ -96,7 +108,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
               type="submit"
               value="Update"
               required
-              className={`w-full 800px:w-[250px] h-[40px] border border-[#37a39a] text-center dark:text-[#fff] text-black rounded-[3px] mt-8 cursor-pointer`}
+              className={`w-full 800px:w-[250px] h-[40px] border border-[#37a39a] text-center dark:text-[#fff] text-black rounded-[3px] mt-8 cursor-pointer hover:bg-[#37a39a] hover:text-white dark:hover:text-[#fff] dark:hover:bg-[#37a39a]`}
             />
           </div>
         </form>

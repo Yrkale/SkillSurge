@@ -19,7 +19,7 @@ const page: FC<Props> = (props) => {
     <div>
       <Protected>
         <Heading
-          title={`${user?.name} profile`}
+          title={`${user?.name}'s Profile - SkillSurge`}
           description="Description"
           keywords="mern, redux, ml, programming"
         />
